@@ -1,0 +1,331 @@
+/* World Map Container */
+.mapContainer {
+  position: relative;
+  width: 100%;
+  height: 70vh;
+  min-height: 400px;
+  max-height: 700px;
+  background: radial-gradient(ellipse at center, #1a3a5c 0%, #0c1929 100%);
+  border-radius: 25px;
+  overflow: hidden;
+  border: 4px solid #4ECDC4;
+  box-shadow: 0 0 50px rgba(78, 205, 196, 0.3);
+  perspective: 1000px;
+}
+
+.spaceStars {
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.5s;
+  z-index: -1;
+}
+
+.spaceStars.visible {
+  opacity: 1;
+}
+
+.spaceStar {
+  position: absolute;
+  background: white;
+  border-radius: 50%;
+}
+
+.mapWrapper {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transform-style: preserve-3d;
+  transition: transform 0.3s ease-out;
+}
+
+.worldMap {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transform-style: preserve-3d;
+  transition: transform 0.3s ease-out, border-radius 0.3s ease-out;
+}
+
+.worldMap.globeView {
+  border-radius: 50%;
+  overflow: hidden;
+}
+
+.worldMap svg {
+  width: 100%;
+  height: 100%;
+  transition: transform 0.3s ease-out;
+}
+
+/* Continents */
+.continent {
+  fill: #2d5a4a;
+  stroke: #4ECDC4;
+  stroke-width: 1;
+  transition: all 0.3s;
+}
+
+.continent:hover {
+  fill: #3d7a6a;
+}
+
+/* Globe overlay */
+.globeOverlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  border-radius: inherit;
+  transition: opacity 0.3s, box-shadow 0.3s;
+  z-index: 50;
+  opacity: 0;
+}
+
+.globeOverlay.active {
+  box-shadow:
+    inset 0 0 100px 50px rgba(12, 25, 41, 0.8),
+    inset 0 0 200px 100px rgba(12, 25, 41, 0.5);
+  border-radius: 50%;
+}
+
+/* Day info overlay */
+.dayInfo {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  background: rgba(255,255,255,0.9);
+  padding: 8px 14px;
+  border-radius: 12px;
+  box-shadow: 0 3px 15px rgba(0,0,0,0.2);
+  z-index: 150;
+}
+
+.dayCounter {
+  color: #FF6B6B;
+  font-size: 1.1em;
+  margin: 0;
+  font-weight: bold;
+}
+
+.locationName {
+  color: #4ECDC4;
+  font-size: 0.85em;
+  margin: 2px 0 0 0;
+  max-width: 150px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Zoom controls */
+.zoomControls {
+  position: absolute;
+  bottom: 20px;
+  right: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  z-index: 200;
+}
+
+.zoomBtn {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  border: 2px solid #4ECDC4;
+  background: rgba(26, 26, 46, 0.9);
+  color: #4ECDC4;
+  font-size: 1.5em;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+}
+
+.zoomBtn:hover {
+  background: #4ECDC4;
+  color: #1a1a2e;
+}
+
+.zoomLevel {
+  text-align: center;
+  color: #4ECDC4;
+  font-size: 0.8em;
+  padding: 5px;
+}
+
+/* Markers container */
+.markers {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  transform-origin: center center;
+  transition: transform 0.3s ease-out;
+}
+
+/* Location marker */
+.locationMarker {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  z-index: 10;
+  cursor: pointer;
+  transition: all 0.3s;
+  pointer-events: auto;
+}
+
+.locationMarker:hover {
+  z-index: 20;
+}
+
+.locationMarker:hover .markerTravelers {
+  transform: scale(1.2);
+}
+
+.markerTravelers {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  transition: transform 0.3s;
+}
+
+.markerAvatar {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #FF6B6B, #FF8E8E);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5em;
+  border: 3px solid white;
+  box-shadow: 0 3px 15px rgba(0,0,0,0.3);
+  overflow: hidden;
+  margin-left: -15px;
+  animation: floatMarker 2s ease-in-out infinite;
+}
+
+.markerAvatar:first-child {
+  margin-left: 0;
+}
+
+.markerAvatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+@keyframes floatMarker {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+
+.markerAvatar:nth-child(2) { animation-delay: 0.2s; }
+.markerAvatar:nth-child(3) { animation-delay: 0.4s; }
+.markerAvatar:nth-child(4) { animation-delay: 0.6s; }
+
+.markerLabel {
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  background: white;
+  padding: 8px 15px;
+  border-radius: 20px;
+  font-size: 0.9em;
+  color: #333;
+  white-space: nowrap;
+  box-shadow: 0 3px 15px rgba(0,0,0,0.2);
+  margin-top: 10px;
+  font-weight: bold;
+}
+
+.markerPulse {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: rgba(255, 107, 107, 0.3);
+  animation: pulseRing 2s ease-out infinite;
+  z-index: -1;
+}
+
+@keyframes pulseRing {
+  0% { transform: translate(-50%, -50%) scale(0.5); opacity: 1; }
+  100% { transform: translate(-50%, -50%) scale(2); opacity: 0; }
+}
+
+/* Flight path */
+.flightPath {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 5;
+}
+
+.flightPath line {
+  stroke: rgba(255, 230, 109, 0.6);
+  stroke-width: 2;
+  stroke-dasharray: 10, 5;
+  animation: dash 1s linear infinite;
+}
+
+@keyframes dash {
+  to { stroke-dashoffset: -15; }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .markerAvatar {
+    width: 35px;
+    height: 35px;
+    font-size: 1em;
+    margin-left: -10px;
+  }
+
+  .markerLabel {
+    font-size: 0.7em;
+    padding: 5px 10px;
+  }
+
+  .dayInfo {
+    top: 8px;
+    left: 8px;
+    padding: 6px 10px;
+  }
+
+  .dayCounter {
+    font-size: 0.9em;
+  }
+
+  .locationName {
+    font-size: 0.75em;
+    max-width: 100px;
+  }
+
+  .mapContainer {
+    height: 50vh;
+    min-height: 300px;
+  }
+}
