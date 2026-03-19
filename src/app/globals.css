@@ -1,0 +1,19 @@
+@import "tailwindcss";
+
+:root {
+  --background: #1a1a2e;
+  --foreground: #ededed;
+}
+
+body {
+  background: linear-gradient(180deg, #1a1a2e 0%, #16213e 100%);
+  color: var(--foreground);
+  font-family: 'Comic Sans MS', 'Chalkboard', cursive;
+  min-height: 100vh;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
